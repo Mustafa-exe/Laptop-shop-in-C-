@@ -1,0 +1,267 @@
+#include <iostream>
+#include <fstream>
+
+
+using namespace std;
+
+struct Laptop
+{
+    string laptopID;
+    string model;
+    string brand;
+    string processor;
+    string quantity;
+    string price;
+};
+
+
+void notepad(Laptop laptops[], int & count);
+void AddLaptop(Laptop laptops[], int & count);
+int DisplayLaptops(Laptop laptops[], int count);
+void CheckLaptopDetails(Laptop laptops[], int count);
+void UpdateLaptopDetails(Laptop laptops[], int count);
+void buyLaptop(Laptop laptops[], int  & count);
+
+int main()
+{
+    char decision;
+    Laptop laptops[100];
+    int count = 0;
+    string choice;
+    int a = 1;
+
+    notepad(laptops, count);
+
+    while (a = 1) 
+
+    {
+
+        system("cls");
+        cout << "\n\n\t\t\t\tWelcome to the Laptop Shop";
+        cout << "\n\n 1. ADD LAPTOP";
+        cout << "\n 2. DISPLAY LAPTOPS";
+        cout << "\n 3. Find LAPTOP";
+        cout << "\n 4. UPDATE LAPTOP";
+        cout << "\n 5. Buy LAPTOP";
+        cout << "\n 6. EXIT";
+        cout << "\n\nEnter your choice : ";
+        cin >> choice;
+
+        if (choice == "1") 
+        {
+            do 
+            {
+                AddLaptop(laptops, count);
+                cout << "\n\nWant to add another laptop? (y/n) : ";
+                cin >> decision;
+            }
+            while (decision == 'y');
+        }
+
+        else if (choice == "2")
+        {
+            DisplayLaptops(laptops, count);
+        }
+
+        else if (choice == "3")
+        {
+            CheckLaptopDetails(laptops, count);
+        }
+
+        else if (choice == "4")
+        {
+            UpdateLaptopDetails(laptops, count);
+        }
+
+        else if (choice == "5")
+        {
+            buyLaptop(laptops, count);
+        }
+        else if (choice == "6") 
+        {
+          
+            exit(0);
+        }
+        else {
+            cout << "\n\nINVALID CHOICE\n";
+        }
+    }
+
+}
+
+
+
+void notepad(Laptop laptops[], int& count)
+{
+    ifstream infile("laptops.txt");
+    if (infile.is_open())
+    {
+        while (count < 100 && infile >> laptops[count].laptopID >> laptops[count].model >> laptops[count].brand >> laptops[count].processor>> laptops[count].quantity >> laptops[count].price)
+        {
+            count++;
+        }
+
+
+        for (int i = count; i < 100; i++)
+        {
+            laptops[i].laptopID = "";
+            laptops[i].model = "";
+            laptops[i].brand = "";
+            laptops[i].processor = "";
+            laptops[i].quantity = "";
+            laptops[i].price = "";
+        }
+
+        infile.close();
+    }
+}
+
+void AddLaptop(Laptop laptops[], int& count) 
+{
+    system("cls");
+    cout << "\n\n\t\t\t\tADD LAPTOP";
+
+    cout << "\n\nLaptop ID : ";
+    cin >> laptops[count].laptopID;
+    cout << "\nModel : ";
+    cin >> laptops[count].model;
+    cout << "\nBrand : ";
+    cin >> laptops[count].brand;
+    cout << "\nProcessor : ";
+    cin >> laptops[count].processor;
+    cout << "\nQuantity : ";
+    cin >> laptops[count].quantity;
+    cout << "\nPrice : ";
+    cin >> laptops[count].price;
+
+
+    fstream outfile("laptops.txt", ios::out);
+    if (outfile.is_open()) 
+    {
+        outfile << laptops[count].laptopID << " " << laptops[count].model << " "<< laptops[count].brand << " " << laptops[count].processor << " "<< laptops[count].quantity << " " << laptops[count].price << endl;
+        outfile.close();
+        cout << "\nLaptop added successfully!";
+    }
+    else
+    {
+        cerr << "\nUnable to open file for writing\n";
+    }
+
+    count++;
+    system("pause");
+}
+
+int DisplayLaptops(Laptop laptops[], int count) 
+{
+    system("cls");
+
+    cout << "\n\n\t\t\t\tDisplay Laptops\n\n";
+
+    for (int i = 0; i < count; i++) 
+    {
+        cout << laptops[i].laptopID << " " << laptops[i].model << " "<< laptops[i].brand << " " << laptops[i].processor << " " << laptops[i].quantity << " "<< laptops[i].price << endl;
+    }
+   
+
+    system("pause");
+    return(laptops, count);
+}
+
+void CheckLaptopDetails(Laptop laptops[], int count)
+{
+    system("cls");
+    string searchID;
+    bool found = false;
+
+    cout << "\n\n\t\t\t\tCheck Specific Laptop Details";
+    cout << "\n\nLaptop ID : ";
+    cin >> searchID;
+
+    for (int i = 0; i < count; i++) 
+    {
+        if (searchID == laptops[i].laptopID)
+        {
+            system("cls");
+            cout << "\n\n\t\t\t\tCheck Specific Laptop Details";
+            cout << "\n\nLaptop ID : " << laptops[i].laptopID;
+            cout << "\nModel : " << laptops[i].model;
+            cout << "\nBrand : " << laptops[i].brand;
+            cout << "\nProcessor : " << laptops[i].processor;
+            cout << "\nQuantity : " << laptops[i].quantity;
+            cout << "\nPrice : " << laptops[i].price << endl << endl;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "\n\nLaptop ID Not Found...";
+    system("pause");
+}
+
+void UpdateLaptopDetails(Laptop laptops[], int count)
+{
+    system("cls");
+    string ID;
+    bool found =false;
+
+    cout << "\n\n\t\t\t\tUpdate Laptop Details";
+    cout << "\n\nEnter Laptop ID to update: ";
+    cin >> ID;
+
+    for (int i = 0; i < count; i++) {
+        if (ID == laptops[i].laptopID) 
+        {
+            cout << "\nEnter new Model: ";
+            cin >> laptops[i].model;
+            cout << "\nEnter new Brand: ";
+            cin >> laptops[i].brand;
+            cout << "\nEnter new Processor: ";
+            cin >> laptops[i].processor;
+            cout << "\nEnter new Quantity: ";
+            cin >> laptops[i].quantity;
+            cout << "\nEnter new Price: ";
+            cin >> laptops[i].price;
+            cout << "\nLaptop details updated successfully!";
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "\n\nLaptop ID Not Found...";
+    system("pause");
+}
+
+void buyLaptop(Laptop laptops[], int& count) 
+{
+    system("cls");
+    string deleteID;
+    bool found = false;
+
+    cout << "\n\n\t\t\t\tDelete Laptop";
+    cout << "\n\nEnter Laptop ID to buy: ";
+    cin >> deleteID;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (deleteID == laptops[i].laptopID)
+        {
+            for (int j = i; j < count - 1; j++) 
+            {
+                laptops[i] = laptops[j + 1];
+            }
+            count--;
+
+          
+
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+        cout << "\n\nLaptop ID Not Found...";
+    system("pause");
+
+}
